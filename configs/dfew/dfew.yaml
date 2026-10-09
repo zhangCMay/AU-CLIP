@@ -1,0 +1,23 @@
+DATA:
+    ROOT: '/home/ubuntu/data/datasets/clip_224x224_16f'
+    TRAIN_FILE: '/home/ubuntu/data/datasets/EmoLabel_DataSplit/train(single-labeled)/set_1.txt'
+    VAL_FILE: '/home/ubuntu/data/datasets/EmoLabel_DataSplit/test(single-labeled)/set_1.txt'
+    DATASET: DFEW
+    NUM_FRAMES: 16
+    NUM_DIVIDE: 4
+    NUM_CLASSES: 7
+    LABEL_LIST: '/home/ubuntu/data/datasets/AU-CLIP-final_01/AU-CLIP/labels2prompt/dfew_7_AUE_labels.csv'
+MODEL:
+    ARCH: ViT-B/16
+    PRETRAINED: None
+TRAIN:
+    BATCH_SIZE: 16
+    ACCUMULATION_STEPS: 2
+    EPOCHS: 50
+    LR: 2.e-6
+AU:
+  ENABLED: True
+  NUM_AU: 18
+  LAMBDA: 0.25
+  POSW_OPTION: "global" #distinct,minor
+  LABEL_PATH: '/home/ubuntu/data/datasets/AU_DFEW_16f.txt'
