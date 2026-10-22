@@ -22,7 +22,7 @@ Set `DATA.ROOT` to the video root and update `DATA.TRAIN_FILE` and `DATA.VAL_FIL
 
 ## Setup and Run
 
-Install the required packages in a Linux environment with CUDA-enabled PyTorch:
+Install the required packages:
 
 ```bash
 git clone https://github.com/zhangCMay/AU-CLIP.git
