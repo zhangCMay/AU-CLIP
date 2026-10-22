@@ -78,10 +78,7 @@ class Transformer(nn.Module):
             x = ff(x)
         return x
 
-# Temporal correlation modeling based on transformer
-###########################################################
-############# output = mean of the all tokens #############
-###########################################################
+
 class Temporal_Transformer_Mean(nn.Module):
     def __init__(self, num_patches, input_dim, depth, heads, mlp_dim, dim_head):
         super().__init__()
@@ -100,9 +97,6 @@ class Temporal_Transformer_Mean(nn.Module):
         return x
 
 
-###########################################################
-#############      output = class tokens      #############
-###########################################################
 class Temporal_Transformer_Cls(nn.Module):
     def __init__(self, num_patches, input_dim, depth, heads, mlp_dim, dim_head):
         super().__init__()
@@ -123,9 +117,6 @@ class Temporal_Transformer_Cls(nn.Module):
         return x
 
 
-###########################################################
-#############        output = all tokens      #############
-###########################################################
 class Temporal_Transformer_All(nn.Module):
     def __init__(self, num_patches, input_dim, depth, heads, mlp_dim, dim_head):
         super().__init__()

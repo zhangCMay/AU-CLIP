@@ -1,7 +1,7 @@
 DATA:
     ROOT: '/home/ubuntu/data/datasets/MAFW/data/frames/frames/frames'
-    TRAIN_FILE: '/home/ubuntu/data/datasets/MAFW/Train_Test_Set/single/no_caption/set_2/train_converted.txt'
-    VAL_FILE: '/home/ubuntu/data/datasets/MAFW/Train_Test_Set/single/no_caption/set_2/test_converted.txt'
+    TRAIN_FILE: '/home/ubuntu/data/datasets/MAFW/Train_Test_Set/single/no_caption/set_1/train_converted.txt'
+    VAL_FILE: '/home/ubuntu/data/datasets/MAFW/Train_Test_Set/single/no_caption/set_1/test_converted.txt'
     DATASET: MAFW
     NUM_FRAMES: 16
     NUM_DIVIDE: 4
@@ -18,6 +18,6 @@ TRAIN:
 AU:
   ENABLED: True
   NUM_AU: 18
-  LAMBDA: 0.05
-  POSW_OPTION: "distinct" #distinct,minor
+  LAMBDA: 0.25
+  POSW_OPTION: "global" #distinct,minor
   LABEL_PATH: '/home/ubuntu/data/datasets/AU_MAFW.txt'

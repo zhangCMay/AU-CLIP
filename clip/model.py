@@ -150,32 +150,7 @@ class CLIP(nn.Module):
 
         self.context_length = context_length
 
-        # vision_heads = vision_width // 64
-        # self.visual = VisionTransformer(
-        #     input_resolution=image_resolution,
-        #     patch_size=vision_patch_size,
-        #     width=vision_width,
-        #     layers=vision_layers,
-        #     heads=vision_heads,
-        #     output_dim=embed_dim
-        # )
-
-        # self.transformer = Transformer(
-        #     width=transformer_width,
-        #     layers=transformer_layers,
-        #     heads=transformer_heads,
-        #     attn_mask=self.build_attention_mask()
-        # )
-
-        # self.vocab_size = vocab_size
-        # self.token_embedding = nn.Embedding(vocab_size, transformer_width)
-        # self.positional_embedding = nn.Parameter(torch.empty(self.context_length, transformer_width))
-        # self.ln_final = LayerNorm(transformer_width)
-
-        # self.text_projection = nn.Parameter(torch.empty(transformer_width, embed_dim))
-        # self.logit_scale = nn.Parameter(torch.ones([]) * np.log(1 / 0.07))
-
-        # self.initialize_parameters()
+        
 
     def initialize_parameters(self):
         nn.init.normal_(self.token_embedding.weight, std=0.02)
