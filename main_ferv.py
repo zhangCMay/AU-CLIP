@@ -21,7 +21,7 @@ from utils.logger import create_logger
 from datasets.build import build_dataloader
 from datasets.blending import FixMixupBlending
 from utils.config import get_config
-from models import AU_clip
+from models import au_clip
 import torch.nn.functional as F
 
 K_TABLE_FERV39K = {
@@ -181,7 +181,7 @@ def main(config):
     train_data, val_data, train_loader, val_loader = build_dataloader(logger, config)
 
     # load pretrained model
-    model, _ = AU_clip.load(config.MODEL.PRETRAINED, config.MODEL.ARCH,
+    model, _ = au_clip.load(config.MODEL.PRETRAINED, config.MODEL.ARCH,
                           device="cpu", jit=False,
                           T=config.DATA.NUM_FRAMES,
                           droppath=config.MODEL.DROP_PATH_RATE,
@@ -707,7 +707,6 @@ if __name__ == '__main__':
 
    
     main(config)
-
 
 
 

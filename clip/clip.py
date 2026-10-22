@@ -71,7 +71,7 @@ def available_models() -> List[str]:
     """Returns the names of available CLIP models"""
     return list(_MODELS.keys())
 
-def loadclip(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.is_available() else "cpu", jit=False):
+def loadclip(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.is_available() else "cpu", jit=True):
     """Load a CLIP model
 
     Parameters
@@ -83,7 +83,7 @@ def loadclip(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.
         The device to put the loaded model
 
     jit : bool
-        Whether to load the optimized JIT model or more hackable non-JIT model (default).
+        Whether to load the optimized JIT model (default: True).
 
     Returns
     -------
@@ -93,7 +93,6 @@ def loadclip(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.
     preprocess : Callable[[PIL.Image], torch.Tensor]
         A torchvision transform that converts a PIL image into a tensor that the returned model can take as its input
     """
-    from clip.model1 import build_model
     if name in _MODELS:
         model_path = _download(_MODELS[name])
     elif os.path.isfile(name):
@@ -113,10 +112,9 @@ def loadclip(name: str, device: Union[str, torch.device] = "cuda" if torch.cuda.
         state_dict = torch.load(model_path, map_location="cpu")
 
     if not jit:
-        model = build_model(state_dict or model.state_dict()).to(device)
-        if str(device) == "cpu":
-            model.float()
-        return model, _transform(model.visual.input_resolution)
+        raise RuntimeError(
+            "Non-JIT CLIP loading is unavailable because its model builder is not included. Use jit=True."
+        )
 
     # patch the device names
     device_holder = torch.jit.trace(lambda: torch.ones([]).to(torch.device(device)), example_inputs=[])
@@ -194,7 +192,7 @@ def load(model_path, name: str, device: Union[str, torch.device] = "cuda" if tor
     preprocess : Callable[[PIL.Image], torch.Tensor]
         A torchvision transform that converts a PIL image into a tensor that the returned model can take as its input
     """
-    from models.AU_clip import build_model
+    from models.au_clip import build_model
 
     if model_path is None:
         model_path = _download(_MODELS[name])
