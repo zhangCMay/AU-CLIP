@@ -6,7 +6,8 @@
 
 ## Abstract
 
-Dynamic facial expression recognition (DFER) is important for understanding human affective states from video sequences. However, existing methods often rely on coarse-grained expression supervision and limited textual semantics, making it difficult to capture subtle facial movements that distinguish different expressions. Moreover, temporal modeling often overlooks irrelevant or weak-expression frames, which may introduce noise and weaken discriminative expression representations. 
+Dynamic facial expression recognition (DFER) is important for understanding human affective states from video sequences. However, existing methods often rely on coarse-grained expression supervision and limited textual semantics, making it difficult to capture subtle facial movements that distinguish different expressions. Moreover, temporal modeling often overlooks irrelevant or weak-expression frames, which may introduce noise and weaken discriminative expression representations.
+
 To address these challenges, we propose AU-CLIP, an action-unit-guided dual-path learning framework with reliability-aware temporal modeling for DFER. Specifically, we construct class-dependent Action Unit (AU) priors to identify facial actions associated with different expressions. Based on these priors, we design AU-guided visual supervision and AU-enriched textual descriptions to enhance fine-grained facial representation learning and expression semantics, respectively. To capture facial dynamics while mitigating temporal noise, we develop a local-to-global temporal modeling strategy that models facial changes within short snippets and integrates information across snippets to obtain global temporal context. Global-local consistency is used to reduce the influence of unreliable temporal content and select visual tokens for video-conditioned text refinement. Finally, global and local visual representations are matched with the refined textual features, and a stage-wise optimization strategy combines global and local expression classification, prediction consistency, and AU supervision. Experiments on three public datasets demonstrate the effectiveness of AU-CLIP.
 
 ## Configuration
@@ -44,4 +45,3 @@ CUDA_VISIBLE_DEVICES=0 torchrun --nproc_per_node=1 --master_port=12355 \
 CUDA_VISIBLE_DEVICES=0 torchrun --nproc_per_node=1 --master_port=12355 \
   main_mafw.py --config=configs/mafw/mafw.yaml --output=outputs/mafw
 ```
-
