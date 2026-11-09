@@ -4,6 +4,7 @@ import os.path as osp
 import shutil
 import warnings
 from collections.abc import Sequence
+from pathlib import Path
 from rdflib import DC
 from mmcv.utils import Registry, build_from_cfg
 from torch.utils.data import Dataset
@@ -99,6 +100,7 @@ class LoadAULabel:
         self.use_sampled_frames = use_sampled_frames
         self.threshold = threshold
         self._au_dict = None  # lazy cache per dataloader worker
+        self.annotation_name = Path(au_path).name
 
     def _lazy_load(self):
         if self._au_dict is not None:
@@ -123,6 +125,8 @@ class LoadAULabel:
 
     def __call__(self, results):
         self._lazy_load()
+        if self.annotation_name in {'AU_FERV39K.txt', 'AU_MAFW.txt'}:
+            return self._load_aligned(results)
         video_id = self._parse_video_id(results['filename'])
 
         # frame_inds are 0-based; AU keys are 1-based ("00001/1"...)
@@ -149,6 +153,29 @@ class LoadAULabel:
             return results
 
         results['au'] = (counts >= (self.threshold * valid)).astype(np.float32)
+        return results
+
+    def _load_aligned(self, results):
+        clip = Path(results['filename'])
+        frames = results['video_reader']
+        indices = (results['frame_inds'] if self.use_sampled_frames and 'frame_inds' in results
+                   else range(len(frames)))
+
+        if self.annotation_name == 'AU_FERV39K.txt':
+            # AU annotations are numbered within each clip from zero. The
+            # sorted image files can retain a nonzero source frame number.
+            clip_id = '/'.join(clip.parts[-3:])
+            keys = [f'{clip_id}/{int(index):02d}' for index in indices]
+        else:
+            # MAFW image stems are padded, while the AU frame IDs are integers.
+            keys = [f'{clip.name}/{int(Path(frames[int(index)]).stem)}' for index in indices]
+
+        annotations = [self._au_dict[key] for key in keys if key in self._au_dict]
+        if not annotations:
+            example = keys[0] if keys else '<no sampled frames>'
+            raise ValueError(f'No AU labels matched {clip} in {self.au_path}; first key: {example}')
+
+        results['au'] = (np.mean(annotations, axis=0) >= self.threshold).astype(np.float32)
         return results
 
 
